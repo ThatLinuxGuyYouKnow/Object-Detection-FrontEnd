@@ -11,7 +11,7 @@ export default function ResultsDisplay() {
     return (
         <Card>
             <CardHeader>
-                <CardTitle>Detection Results</CardTitle>
+                <CardTitle>General Object Detection Results</CardTitle>
             </CardHeader>
             <CardContent>
                 {mockResults.length > 0 ? (

@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Upload } from 'lucide-react'
+import analyzeImage from '../../logic/analyzeImage' // Import as a named export
 
 export default function ImageUpload() {
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
@@ -15,8 +16,14 @@ export default function ImageUpload() {
 
     const handleUpload = async () => {
         if (selectedFile) {
-            // TODO: Implement actual upload logic
             console.log('Uploading file:', selectedFile.name)
+            try {
+                const data = await analyzeImage(selectedFile) // Await the result
+                alert(data)
+            } catch (error) {
+                console.error('Error analyzing image:', error)
+                alert('Failed to analyze image')
+            }
             // Reset selected file after upload
             setSelectedFile(null)
         }
@@ -36,4 +43,3 @@ export default function ImageUpload() {
         </div>
     )
 }
-
