@@ -1,5 +1,3 @@
-
-
-function storePreferredDetectionModel(model: string) {
-    document.cookie = `imageModel=${model}; Path=/; Secure; SameSite=Lax`;
+export default function storePreferredDetectionModel(model: string) {
+    const preferredModel = localStorage.getItem('imageModel') || 'yolov5';
 }

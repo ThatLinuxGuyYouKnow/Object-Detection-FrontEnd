@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 
@@ -11,7 +11,12 @@ const models = [
 ]
 
 export default function ModelSelector() {
-    const [selectedModel, setSelectedModel] = useState('yolov5')
+    const [selectedModel, setSelectedModel] = useState('yolov5');
+
+    // Store the selected model in a cookie whenever it changes
+    useEffect(() => {
+        storePreferredDetectionModel(selectedModel);
+    }, [selectedModel]);
 
     return (
         <div className="py-4">
@@ -28,3 +33,6 @@ export default function ModelSelector() {
     )
 }
 
+function storePreferredDetectionModel(model: string) {
+    document.cookie = `imageModel=${model}; Path=/; Secure; SameSite=Lax`;
+}
