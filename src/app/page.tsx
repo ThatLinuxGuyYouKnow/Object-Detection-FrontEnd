@@ -14,9 +14,9 @@ type ProcessingResult = {
   statistics?: string[];
   recommendations?: string[];
   detectedObjects?: Array<{ object: string; confidence: string }>;
-  analysis?: any;
-  report?: string; // Added field for the report content
-}
+  analysis?: Record<string, unknown>; // Explicit type for analysis
+  report?: string; // This type is already correct
+};
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
