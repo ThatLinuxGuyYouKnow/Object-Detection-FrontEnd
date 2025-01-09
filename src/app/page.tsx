@@ -18,7 +18,7 @@ export default function Home() {
       <h1 className="text-3xl font-bold mb-6">Object Detection Platform</h1>
       <ModeSelector onModeChange={setMode} />
       <div className="flex justify-between items-center mb-4">
-        <ImageUpload />
+        <ImageUpload mode={mode} />
         <SettingsButton />
       </div>
       {mode === 'general' && <ResultsDisplay />}

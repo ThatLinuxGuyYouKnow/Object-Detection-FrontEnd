@@ -4,9 +4,15 @@ import { useState } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Upload } from 'lucide-react'
-import analyzeImage from '../../logic/analyzeImage' // Import as a named export
+import analyzeImage from '@/logic/analyzeImage'
 
-export default function ImageUpload() {
+type Mode = 'general' | 'analysis' | 'report'
+
+interface ImageUploadProps {
+    mode: Mode
+}
+
+export default function ImageUpload({ mode }: ImageUploadProps) {
     const [selectedFile, setSelectedFile] = useState<File | null>(null)
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -18,13 +24,18 @@ export default function ImageUpload() {
         if (selectedFile) {
             console.log('Uploading file:', selectedFile.name)
             try {
-                const data = await analyzeImage(selectedFile) // Await the result
-                alert(data)
+                let result
+                switch (mode) {
+                    case 'general':
+                        result = await analyzeImage(selectedFile)
+                        break
+
+                }
+                alert(JSON.stringify(result, null, 2))
             } catch (error) {
-                console.error('Error analyzing image:', error)
-                alert('Failed to analyze image')
+                console.error('Error processing image:', error)
+                alert('Failed to process image')
             }
-            // Reset selected file after upload
             setSelectedFile(null)
         }
     }
@@ -43,3 +54,4 @@ export default function ImageUpload() {
         </div>
     )
 }
+
