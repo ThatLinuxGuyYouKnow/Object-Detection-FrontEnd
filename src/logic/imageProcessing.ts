@@ -2,7 +2,7 @@ export default async function analyzeImage(file: File) {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch("https://object-detection-server-bbmm.onrender.com/analyse", {
+    const response = await fetch("https://object-detection-server-bbmm.onrender.com/analyse", { // you will need to change this to your own server
         method: 'POST',
         body: formData, // Send as FormData
     });

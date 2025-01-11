@@ -15,7 +15,7 @@ type ProcessingResult = {
   recommendations?: string[];
   detectedObjects?: Array<{ object: string; confidence: string }>;
   analysis?: Record<string, unknown>; // Explicit type for analysis
-  report?: string; // This type is already correct
+  report?: string;
 };
 
 export default function Home() {
