@@ -2,7 +2,7 @@ export default async function analyzeImage(file: File) {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch("https://object-detection-server-bbmm.onrender.com/analyse", { // you will need to change this to your own server
+    const response = await fetch("http://127.0.0.1:5000/analyse", { // you will need to change this to your own server
         method: 'POST',
         body: formData, // Send as FormData
     });
@@ -20,7 +20,7 @@ export async function generateImageReport(file: File) {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch("https://object-detection-server-bbmm.onrender.com/report", {
+    const response = await fetch("http://127.0.0.1:5000/report", {
         method: 'POST',
         body: formData, // Send as FormData
     });
@@ -36,20 +36,19 @@ export async function generateImageReport(file: File) {
 
 export async function detectObjects(file: File) {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('image', file);
 
-    const response = await fetch("https://object-detection-server-bbmm.onrender.com/detect", {
+    const response = await fetch("http://127.0.0.1:5000/detect", {
         method: 'POST',
-        body: formData, // Send as FormData
+        body: formData,
     });
 
     if (!response.ok) {
         const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to analyze image");
+        throw new Error(errorData.error || "Failed to detect objects in the image");
     }
 
-    const result = await response.json();
-    return result.data.objects_detected;
+
+    const blob = await response.blob();
+    return URL.createObjectURL(blob);
 }
-
-

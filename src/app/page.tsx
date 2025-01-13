@@ -13,7 +13,7 @@ type ProcessingResult = {
   summary?: string;
   statistics?: string[];
   recommendations?: string[];
-  detectedObjects?: Array<{ object: string; confidence: string }>;
+  detectedObjects?: string;
   analysis?: Record<string, unknown>; // Explicit type for analysis
   report?: string;
 };
@@ -33,78 +33,74 @@ export default function Home() {
   }
 
   const handleUpload = async () => {
-    if (!selectedFile) return
+    if (!selectedFile) return;
 
-    setIsLoading(true)
-    setError(null)
+    setIsLoading(true);
+    setError(null);
 
     try {
-      let processedResult
+      let processedResult;
 
       switch (mode) {
         case 'general':
-          processedResult = await detectObjects(selectedFile)
-          setResult({ detectedObjects: processedResult })
-          break
+          processedResult = await detectObjects(selectedFile);
+          setResult({ detectedObjects: processedResult }); // Store image URL
+          break;
 
         case 'analysis':
-          processedResult = await analyzeImage(selectedFile)
-          setResult({ analysis: processedResult })
-          break
+          processedResult = await analyzeImage(selectedFile);
+          setResult({ analysis: processedResult });
+          break;
 
         case 'report':
-          processedResult = await generateImageReport(selectedFile)
-          setResult({ report: processedResult }) // Handle the report content
-          break
+          processedResult = await generateImageReport(selectedFile);
+          setResult({ report: processedResult }); // Handle the report content
+          break;
       }
     } catch (error) {
-      console.error('Error processing image:', error)
-      setError(error instanceof Error ? error.message : 'Failed to process image')
+      console.error('Error processing image:', error);
+      setError(error instanceof Error ? error.message : 'Failed to process image');
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  };
+
 
   const renderResults = () => {
-    if (!result) return null
+    if (!result) return null;
 
     switch (mode) {
       case 'general':
         return result.detectedObjects ? (
           <div>
             <h3 className="font-semibold mb-2">Detected Objects</h3>
-            <pre className="bg-gray-100 p-4 rounded-lg overflow-auto">
-              <ul className="list-disc list-inside">
-                {result.detectedObjects.map((obj, index) => (
-                  <li key={index}>
-                    {obj.object} (Confidence: {obj.confidence})
-                  </li>
-                ))}
-
-              </ul>
-            </pre>
+            <img
+              src={result.detectedObjects as unknown as string} // Use the URL created from Blob
+              alt="Detected Objects"
+              className="rounded-lg shadow-lg max-w-full"
+            />
           </div>
-        ) : null
+
+        ) : null;
 
       case 'report':
         return result.report ? (
           <pre className="bg-gray-100 p-4 rounded-lg overflow-auto">
             {JSON.stringify(result.report, null, 2)}
           </pre>
-        ) : null
-
+        ) : null;
 
       case 'analysis':
         return result.analysis ? (
           <pre className="bg-gray-100 p-4 rounded-lg overflow-auto">
             {JSON.stringify(result.analysis, null, 2)}
           </pre>
-        ) : null
+        ) : null;
 
       default:
-        return null
+        return null;
     }
-  }
+  };
 
   return (
     <div className="container mx-auto py-10 space-y-6">
