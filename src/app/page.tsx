@@ -17,7 +17,7 @@ type ProcessingResult = {
   analysis?: Record<string, unknown>;
   report?: string;
 };
-
+var uploadedImage: File;
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [result, setResult] = useState<ProcessingResult | null>(null)
