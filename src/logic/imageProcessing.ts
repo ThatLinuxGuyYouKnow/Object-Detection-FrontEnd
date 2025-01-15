@@ -2,9 +2,9 @@ export default async function analyzeImage(file: File) {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch("http://127.0.0.1:5000/analyse", { // you will need to change this to your own server
+    const response = await fetch("http://127.0.0.1:5000/analyse", {
         method: 'POST',
-        body: formData, // Send as FormData
+        body: formData,
     });
 
     if (!response.ok) {
@@ -22,7 +22,7 @@ export async function generateImageReport(file: File) {
 
     const response = await fetch("http://127.0.0.1:5000/report", {
         method: 'POST',
-        body: formData, // Send as FormData
+        body: formData,
     });
 
     if (!response.ok) {

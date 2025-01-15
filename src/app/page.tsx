@@ -14,7 +14,7 @@ type ProcessingResult = {
   statistics?: string[];
   recommendations?: string[];
   detectedObjects?: string;
-  analysis?: Record<string, unknown>; // Explicit type for analysis
+  analysis?: Record<string, unknown>;
   report?: string;
 };
 
@@ -44,7 +44,7 @@ export default function Home() {
       switch (mode) {
         case 'general':
           processedResult = await detectObjects(selectedFile);
-          setResult({ detectedObjects: processedResult }); // Store image URL
+          setResult({ detectedObjects: processedResult });
           break;
 
         case 'analysis':
@@ -54,7 +54,7 @@ export default function Home() {
 
         case 'report':
           processedResult = await generateImageReport(selectedFile);
-          setResult({ report: processedResult }); // Handle the report content
+          setResult({ report: processedResult });
           break;
       }
     } catch (error) {
@@ -75,7 +75,7 @@ export default function Home() {
           <div>
             <h3 className="font-semibold mb-2">Detected Objects</h3>
             <img
-              src={result.detectedObjects as unknown as string} // Use the URL created from Blob
+              src={result.detectedObjects as unknown as string}
               alt="Detected Objects"
               className="rounded-lg shadow-lg max-w-full"
             />
