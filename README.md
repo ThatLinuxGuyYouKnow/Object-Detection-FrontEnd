@@ -24,7 +24,7 @@ A modern React frontend for object detection, built with TypeScript and shadcn/u
 
 1. Install dependencies:
 ```bash
-npm install
+npm install --force
 # or
 yarn install
 ```
