@@ -1,4 +1,4 @@
-# Object Detection Frontend
+# Object Detection(and image analysis) Frontend
 
 ![React](https://img.shields.io/badge/React-18.0+-blue.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.0+-blue.svg)
