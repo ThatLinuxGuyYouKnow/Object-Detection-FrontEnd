@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Upload } from 'lucide-react'
@@ -17,19 +17,35 @@ type ProcessingResult = {
   analysis?: Record<string, unknown>;
   report?: string;
 };
-var uploadedImage: File;
+
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [selectedImageUrl, setSelectedImageUrl] = useState<string | null>(null)
   const [result, setResult] = useState<ProcessingResult | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [mode, setMode] = useState<Mode>('general')
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (selectedImageUrl) {
+        URL.revokeObjectURL(selectedImageUrl)
+      }
+    }
+  }, [selectedImageUrl])
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files ? event.target.files[0] : null
     setSelectedFile(file)
     setResult(null)
     setError(null)
+
+    if (file) {
+      const imageUrl = URL.createObjectURL(file)
+      setSelectedImageUrl(imageUrl)
+    } else {
+      setSelectedImageUrl(null)
+    }
   }
 
   const handleUpload = async () => {
@@ -65,7 +81,6 @@ export default function Home() {
     }
   };
 
-
   const renderResults = () => {
     if (!result) return null;
 
@@ -75,24 +90,23 @@ export default function Home() {
           <div>
             <h3 className="font-semibold mb-2">Detected Objects</h3>
             <img
-              src={result.detectedObjects as unknown as string}
+              src={result.detectedObjects as unknown as string || "/placeholder.svg"}
               alt="Detected Objects"
               className="rounded-lg shadow-lg max-w-full"
             />
           </div>
-
         ) : null;
 
       case 'report':
         return result.report ? (
-          <pre className="bg-gray-100 p-4 rounded-lg overflow-auto">
+          <pre className="bg-gray-100 p-4 rounded-lg overflow-auto whitespace-pre-wrap break-words max-w-full">
             {JSON.stringify(result.report, null, 2)}
           </pre>
         ) : null;
 
       case 'analysis':
         return result.analysis ? (
-          <pre className="bg-gray-100 p-4 rounded-lg overflow-auto">
+          <pre className="bg-gray-100 p-4 rounded-lg overflow-auto whitespace-pre-wrap break-words max-w-full">
             {JSON.stringify(result.analysis, null, 2)}
           </pre>
         ) : null;
@@ -103,10 +117,10 @@ export default function Home() {
   };
 
   return (
-    <div className="container mx-auto py-10 space-y-6">
+    <div className="container mx-auto py-10 px-4 space-y-6">
       <h1 className="text-3xl font-bold mb-6">Object Detection Platform</h1>
 
-      <div className="flex space-x-4">
+      <div className="flex flex-wrap gap-4">
         <Button
           variant={mode === 'general' ? 'default' : 'outline'}
           onClick={() => setMode('general')}
@@ -127,7 +141,7 @@ export default function Home() {
         </Button>
       </div>
 
-      <div className="flex items-center space-x-2">
+      <div className="flex flex-wrap items-center gap-4">
         <Input
           type="file"
           onChange={handleFileChange}
@@ -143,8 +157,23 @@ export default function Home() {
         </Button>
       </div>
 
+      {selectedImageUrl && (
+        <Card className="mt-4">
+          <CardHeader>
+            <CardTitle>Selected Image</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <img
+              src={selectedImageUrl || "/placeholder.svg"}
+              alt="Selected"
+              className="rounded-lg shadow-lg max-w-full h-auto"
+            />
+          </CardContent>
+        </Card>
+      )}
+
       {(result || error) && (
-        <Card>
+        <Card className="max-w-full">
           <CardHeader>
             <CardTitle>
               {mode === 'general' ? 'Detection Results' :
@@ -154,7 +183,7 @@ export default function Home() {
           </CardHeader>
           <CardContent>
             {error ? (
-              <div className="text-red-500">{error}</div>
+              <div className="text-red-500 break-words">{error}</div>
             ) : (
               renderResults()
             )}
@@ -164,3 +193,4 @@ export default function Home() {
     </div>
   )
 }
+
