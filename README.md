@@ -6,7 +6,11 @@
 ![shadcn/ui](https://img.shields.io/badge/shadcn%2Fui-latest-purple.svg)
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 
-A modern React frontend for object detection, built with TypeScript and shadcn/ui components. Features a clean interface for uploading and analyzing images using different processing modes.
+An interface for uploading and analyzing images using different processing modes.
+
+## First, a sample
+
+![Aachen](image.png)
 
 ## Features
 
@@ -37,7 +41,6 @@ npm run dev
 # or
 yarn dev
 ```
-
 
 
 ### Image Processing Functions
